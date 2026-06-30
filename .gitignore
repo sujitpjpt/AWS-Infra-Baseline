@@ -1,0 +1,29 @@
+# Claude context — never commit
+CLAUDE.md
+DECISIONS.md
+
+# Private logs
+logs/
+
+# Terraform state and overrides
+*.tfstate
+*.tfstate.*
+.terraform/
+override.tf
+override.tf.json
+
+# Secrets
+*.tfvars
+!*.tfvars.example
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
