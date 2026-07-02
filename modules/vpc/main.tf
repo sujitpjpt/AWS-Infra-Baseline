@@ -12,6 +12,8 @@ locals {
     ManagedBy   = "terraform"
     Owner       = "sujit"
   }
+
+  az_gw_mapping = { for key, value in aws_subnet.public_subnet : value.availability_zone => aws_nat_gateway.nat_gw[key].id }
 }
 
 resource "aws_vpc" "main_vpc" {
@@ -61,29 +63,11 @@ resource "aws_route_table" "public_route_table" {
   })
 }
 
-
-# resource "aws_route_table" "private_route_table" {
-#   vpc_id = aws_vpc.main_vpc.id
-#   route {
-#     cidr_block = "0.0.0.0/0"
-#     gateway_id = aws_internet_gateway.main_gateway.id
-#   }
-#   tags = merge(local.common_tags, {
-#     Name = "${var.project}-${var.environment}-private-route-table"
-#   })
-# }
-
 resource "aws_route_table_association" "public_association" {
   for_each       = aws_subnet.public_subnet
   subnet_id      = each.value.id
   route_table_id = aws_route_table.public_route_table.id
 }
-
-# resource "aws_route_table_association" "private_association" {
-#   for_each       = aws_subnet.private_subnet
-#   subnet_id      = each.value.id
-#   route_table_id = aws_route_table.private_route_table.id
-# }
 
 resource "aws_eip" "nat_eip" {
   for_each = aws_subnet.public_subnet
@@ -98,4 +82,20 @@ resource "aws_nat_gateway" "nat_gw" {
   tags          = merge(local.common_tags, { Name = "${var.project}-${var.environment}-nat-${each.value.availability_zone}" })
 }
 
+resource "aws_route_table" "private_route_table" {
+  for_each = aws_subnet.private_subnet
+  vpc_id   = aws_vpc.main_vpc.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = local.az_gw_mapping[each.value.availability_zone]
+  }
+  tags = merge(local.common_tags, {
+    Name = "${var.project}-${var.environment}-private-route-table-${each.value.availability_zone}"
+  })
+}
 
+resource "aws_route_table_association" "private_association" {
+  for_each       = aws_subnet.private_subnet
+  subnet_id      = each.value.id
+  route_table_id = aws_route_table.private_route_table[each.key].id
+}

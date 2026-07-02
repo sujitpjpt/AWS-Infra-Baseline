@@ -14,13 +14,3 @@ module "vpc" {
   project     = "aws-infra-baseline"
   environment = "dev"
 }
-
-# output "az_debug" {
-#   value = module.vpc.debug_av_zones
-# }
-# output "debug_public_subnet_ids" {
-#   value = module.vpc.public_subnet_ids
-# }
-output "debug_eip" {
-  value = module.vpc.debug_eip
-}
