@@ -5,7 +5,7 @@ terraform {
 
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
+      source = "hashicorp/aws"
       # ~> 5.0 allows any 5.x patch but not 6.x — pessimistic constraint
       version = "~> 5.0"
     }
@@ -24,5 +24,6 @@ terraform {
 # Region is set here at the provider level, not inside modules,
 # so modules remain region-agnostic and reusable.
 provider "aws" {
-  region = "ca-central-1"
+  profile = "terraform-dev"
+  region  = "ca-central-1"
 }
