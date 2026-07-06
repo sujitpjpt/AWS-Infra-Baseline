@@ -1,9 +1,4 @@
-# Creates the S3 bucket that will store Terraform state files.
-# This must be applied with LOCAL state first (no backend block yet).
-# After apply, you add the backend block and run terraform init -migrate-state.
-
-# The bucket name follows the convention: {project}-{env}-tfstate
-# e.g. infra-dev-tfstate
+# Creates the S3 bucket for Terraform state — apply this with LOCAL state first, then add the backend block and run terraform init -migrate-state.
 
 resource "aws_s3_bucket" "state" {
   bucket = "${var.project}-${var.environment}-tfstate"

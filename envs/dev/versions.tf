@@ -1,6 +1,5 @@
 terraform {
-  # Pin to exact minor version. ~> 1.15.6 allows patch releases (1.15.7, 1.15.8)
-  # but not minor bumps (1.16.x). Keeps CI and local environments in sync.
+  # ~> 1.15.6 allows patch releases (1.15.7, 1.15.8) but not minor bumps (1.16.x), keeping CI and local environments in sync.
   required_version = "~> 1.15.6"
 
   required_providers {
@@ -20,9 +19,7 @@ terraform {
   }
 }
 
-# All resources in this environment deploy to ca-central-1.
-# Region is set here at the provider level, not inside modules,
-# so modules remain region-agnostic and reusable.
+# Region is set here at the provider level, not inside modules, so modules remain region-agnostic and reusable.
 provider "aws" {
   profile = "terraform-dev"
   region  = "ca-central-1"
