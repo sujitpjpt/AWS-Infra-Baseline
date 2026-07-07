@@ -23,8 +23,7 @@ resource "aws_s3_bucket_versioning" "state" {
   }
 }
 
-# Encrypts state files at rest using AES256.
-# State files can contain sensitive values so encryption is non-negotiable.
+# Encrypts state files at rest using AES256 — state can contain sensitive values, so encryption is non-negotiable.
 resource "aws_s3_bucket_server_side_encryption_configuration" "state" {
   bucket = aws_s3_bucket.state.id
 

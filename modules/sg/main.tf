@@ -92,8 +92,7 @@ resource "aws_vpc_security_group_egress_rule" "https_out" {
   ip_protocol       = "tcp"
 }
 
-# Data tier — only reachable from the app tier. No egress rules: a database never needs to initiate outbound traffic,
-# and SGs are stateful, so reply traffic to the app tier is allowed automatically without an explicit egress rule.
+# Data tier — only reachable from the app tier; no egress rules needed since SGs are stateful and reply traffic is automatic.
 resource "aws_security_group" "private_db_sg" {
   name        = "private_db_sg"
   description = "Private DB subnet security group"

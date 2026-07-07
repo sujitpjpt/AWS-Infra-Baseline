@@ -111,6 +111,7 @@ resource "aws_route_table" "private_app_route_table" {
   })
 }
 
+# Deliberately has no `route` block — only the implicit local VPC route exists, matching the NACL above (no 140/150 egress rules).
 resource "aws_route_table" "private_data_route_table" {
   for_each = aws_subnet.private_data_subnet
   vpc_id   = aws_vpc.main_vpc.id
@@ -137,6 +138,8 @@ resource "aws_network_acl" "public_subnet_acl" {
   subnet_ids = [for s in aws_subnet.public_subnet : s.id]
 
   # NACLs are stateless, so every allowed request needs an explicit rule for its response traffic (the ephemeral port ranges below).
+
+  # Allow inbound HTTP from anywhere — typically just a redirect to HTTPS.
   ingress {
     protocol   = "tcp"
     rule_no    = 100
@@ -146,6 +149,7 @@ resource "aws_network_acl" "public_subnet_acl" {
     to_port    = 80
   }
 
+  # Allow inbound HTTPS from anywhere — the real entry point for client traffic hitting the ALB.
   ingress {
     protocol   = "tcp"
     rule_no    = 110
@@ -155,6 +159,7 @@ resource "aws_network_acl" "public_subnet_acl" {
     to_port    = 443
   }
 
+  # Allow inbound ephemeral ports from anywhere — carries reply traffic for connections this subnet itself initiates (e.g. the ALB's own outbound calls), since NACLs evaluate each direction independently.
   ingress {
     protocol   = "tcp"
     rule_no    = 120
@@ -164,6 +169,7 @@ resource "aws_network_acl" "public_subnet_acl" {
     to_port    = 65535
   }
 
+  # Allow outbound HTTP to anywhere — reply path for inbound HTTP (rule 100) plus any outbound HTTP calls from this subnet.
   egress {
     protocol   = "tcp"
     rule_no    = 130
@@ -173,6 +179,7 @@ resource "aws_network_acl" "public_subnet_acl" {
     to_port    = 80
   }
 
+  # Allow outbound HTTPS to anywhere — reply path for inbound HTTPS (rule 110) plus any outbound HTTPS calls from this subnet.
   egress {
     protocol   = "tcp"
     rule_no    = 140
@@ -182,6 +189,7 @@ resource "aws_network_acl" "public_subnet_acl" {
     to_port    = 443
   }
 
+  # Allow outbound traffic to the app tier on app_port, scoped to the VPC CIDR — this is the ALB forwarding requests to the app subnet.
   egress {
     protocol   = "tcp"
     rule_no    = 150
@@ -191,6 +199,7 @@ resource "aws_network_acl" "public_subnet_acl" {
     to_port    = var.app_port
   }
 
+  # Allow outbound ephemeral ports to anywhere — reply path for inbound requests this subnet is servicing as a "server" (rules 100/110).
   egress {
     protocol   = "tcp"
     rule_no    = 160
@@ -209,6 +218,7 @@ resource "aws_network_acl" "private_app_subnet_acl" {
   vpc_id     = aws_vpc.main_vpc.id
   subnet_ids = [for s in aws_subnet.private_app_subnet : s.id]
 
+  # Allow inbound app traffic from the public subnet only, on app_port — this is the ALB forwarding requests in.
   ingress {
     protocol   = "tcp"
     rule_no    = 100
@@ -218,7 +228,7 @@ resource "aws_network_acl" "private_app_subnet_acl" {
     to_port    = var.app_port
   }
 
-  # Must stay 0.0.0.0/0, not var.vpc_cidr — this also carries return traffic for the internet egress below (rules 140/150, e.g. apt-get update).
+  # Allow inbound ephemeral ports from anywhere — reply path for DB connections (rule 120) and internet egress (140/150) this subnet initiates; must stay 0.0.0.0/0, not var.vpc_cidr, to also carry that return traffic.
   ingress {
     protocol   = "tcp"
     rule_no    = 110
@@ -228,6 +238,7 @@ resource "aws_network_acl" "private_app_subnet_acl" {
     to_port    = 65535
   }
 
+  # Allow outbound traffic to the data tier on db_port, scoped to the VPC CIDR — the app tier querying the database.
   egress {
     protocol   = "tcp"
     rule_no    = 120
@@ -237,6 +248,7 @@ resource "aws_network_acl" "private_app_subnet_acl" {
     to_port    = var.db_port
   }
 
+  # Allow outbound ephemeral ports within the VPC — reply path for inbound app traffic this subnet is servicing as a "server" (rule 100).
   egress {
     protocol   = "tcp"
     rule_no    = 130
@@ -246,6 +258,7 @@ resource "aws_network_acl" "private_app_subnet_acl" {
     to_port    = 65535
   }
 
+  # Allow outbound HTTP to the internet (via NAT) — e.g. package installs, OS updates.
   egress {
     protocol   = "tcp"
     rule_no    = 140
@@ -255,6 +268,7 @@ resource "aws_network_acl" "private_app_subnet_acl" {
     to_port    = 80
   }
 
+  # Allow outbound HTTPS to the internet (via NAT) — e.g. external API calls, package registries.
   egress {
     protocol   = "tcp"
     rule_no    = 150
@@ -273,6 +287,7 @@ resource "aws_network_acl" "private_data_subnet_acl" {
   vpc_id     = aws_vpc.main_vpc.id
   subnet_ids = [for s in aws_subnet.private_data_subnet : s.id]
 
+  # Allow inbound database traffic from the app tier only, on db_port — no other subnet or the internet can reach this.
   ingress {
     protocol   = "tcp"
     rule_no    = 100
@@ -282,6 +297,7 @@ resource "aws_network_acl" "private_data_subnet_acl" {
     to_port    = var.db_port
   }
 
+  # Allow outbound ephemeral ports within the VPC only — reply path for inbound DB connections (rule 100); no internet-facing rules exist on this NACL since the data tier never initiates outbound traffic.
   egress {
     protocol   = "tcp"
     rule_no    = 110

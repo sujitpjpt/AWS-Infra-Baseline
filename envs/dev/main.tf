@@ -12,3 +12,12 @@ module "vpc" {
   project     = "aws-infra-baseline"
   environment = "dev"
 }
+
+module "sg" {
+  source      = "../../modules/sg"
+  project     = "aws-infra-baseline"
+  environment = "dev"
+  vpc_id      = module.vpc.vpc_id
+  app_port    = module.vpc.vpc_app_port
+  db_port     = module.vpc.vpc_db_port
+}
