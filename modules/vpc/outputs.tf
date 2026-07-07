@@ -37,3 +37,13 @@ output "private_data_subnet_acl" {
   description = "The ID of the private data subnet ACL"
   value       = aws_network_acl.private_data_subnet_acl.id
 }
+
+output "vpc_app_port" {
+  description = "The port the app tier listens on"
+  value       = var.app_port
+}
+
+output "vpc_db_port" {
+  description = "The port the data tier listens on"
+  value       = var.db_port
+}
