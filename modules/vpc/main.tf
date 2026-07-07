@@ -45,7 +45,7 @@ resource "aws_subnet" "private_app_subnet" {
   cidr_block        = each.key
   availability_zone = each.value
   tags = merge(local.common_tags, {
-    Name = "${var.project}-${var.environment}-private-${each.value}"
+    Name = "${var.project}-${var.environment}-private-app-${each.value}"
   })
 }
 
@@ -55,7 +55,7 @@ resource "aws_subnet" "private_data_subnet" {
   cidr_block        = each.key
   availability_zone = each.value
   tags = merge(local.common_tags, {
-    Name = "${var.project}-${var.environment}-private-${each.value}"
+    Name = "${var.project}-${var.environment}-private-db-${each.value}"
   })
 }
 
