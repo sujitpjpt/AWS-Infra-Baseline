@@ -11,4 +11,4 @@ output "private_app_sg_id" {
 output "private_db_sg_id" {
   value       = aws_security_group.private_db_sg.id
   description = "The ID of the private db security group"
-}   
+}

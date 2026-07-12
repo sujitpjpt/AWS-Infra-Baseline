@@ -21,3 +21,9 @@ module "sg" {
   app_port    = module.vpc.vpc_app_port
   db_port     = module.vpc.vpc_db_port
 }
+
+module "iam" {
+  source      = "../../modules/iam"
+  project     = "aws-infra-baseline"
+  environment = "dev"
+}
