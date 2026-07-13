@@ -20,6 +20,6 @@ variable "app_port" {
 }
 
 variable "db_port" {
-  description = "Port the data tier listens on (5432 for Postgres, 3306 for MySQL)"
+  description = "Port the db tier listens on (5432 for Postgres, 3306 for MySQL)"
   type        = number
 }

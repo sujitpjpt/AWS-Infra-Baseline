@@ -49,8 +49,8 @@ resource "aws_subnet" "private_app_subnet" {
   })
 }
 
-resource "aws_subnet" "private_data_subnet" {
-  for_each          = zipmap(var.private_data_subnet_cidrs, local.azs)
+resource "aws_subnet" "private_db_subnet" {
+  for_each          = zipmap(var.private_db_subnet_cidrs, local.azs)
   vpc_id            = aws_vpc.main_vpc.id
   cidr_block        = each.key
   availability_zone = each.value
@@ -112,11 +112,11 @@ resource "aws_route_table" "private_app_route_table" {
 }
 
 # Deliberately has no `route` block — only the implicit local VPC route exists, matching the NACL above (no 140/150 egress rules).
-resource "aws_route_table" "private_data_route_table" {
-  for_each = aws_subnet.private_data_subnet
+resource "aws_route_table" "private_db_route_table" {
+  for_each = aws_subnet.private_db_subnet
   vpc_id   = aws_vpc.main_vpc.id
   tags = merge(local.common_tags, {
-    Name = "${var.project}-${var.environment}-private-data-route-table-${each.value.availability_zone}"
+    Name = "${var.project}-${var.environment}-private-db-route-table-${each.value.availability_zone}"
   })
 }
 
@@ -127,10 +127,10 @@ resource "aws_route_table_association" "private_app_association" {
   route_table_id = aws_route_table.private_app_route_table[each.key].id
 }
 
-resource "aws_route_table_association" "private_data_association" {
-  for_each       = aws_subnet.private_data_subnet
+resource "aws_route_table_association" "private_db_association" {
+  for_each       = aws_subnet.private_db_subnet
   subnet_id      = each.value.id
-  route_table_id = aws_route_table.private_data_route_table[each.key].id
+  route_table_id = aws_route_table.private_db_route_table[each.key].id
 }
 
 resource "aws_network_acl" "public_subnet_acl" {
@@ -238,7 +238,7 @@ resource "aws_network_acl" "private_app_subnet_acl" {
     to_port    = 65535
   }
 
-  # Allow outbound traffic to the data tier on db_port, scoped to the VPC CIDR — the app tier querying the database.
+  # Allow outbound traffic to the db tier on db_port, scoped to the VPC CIDR — the app tier querying the database.
   egress {
     protocol   = "tcp"
     rule_no    = 120
@@ -283,9 +283,9 @@ resource "aws_network_acl" "private_app_subnet_acl" {
   })
 }
 
-resource "aws_network_acl" "private_data_subnet_acl" {
+resource "aws_network_acl" "private_db_subnet_acl" {
   vpc_id     = aws_vpc.main_vpc.id
-  subnet_ids = [for s in aws_subnet.private_data_subnet : s.id]
+  subnet_ids = [for s in aws_subnet.private_db_subnet : s.id]
 
   # Allow inbound database traffic from the app tier only, on db_port — no other subnet or the internet can reach this.
   ingress {
@@ -297,7 +297,7 @@ resource "aws_network_acl" "private_data_subnet_acl" {
     to_port    = var.db_port
   }
 
-  # Allow outbound ephemeral ports within the VPC only — reply path for inbound DB connections (rule 100); no internet-facing rules exist on this NACL since the data tier never initiates outbound traffic.
+  # Allow outbound ephemeral ports within the VPC only — reply path for inbound DB connections (rule 100); no internet-facing rules exist on this NACL since the db tier never initiates outbound traffic.
   egress {
     protocol   = "tcp"
     rule_no    = 110
@@ -308,6 +308,6 @@ resource "aws_network_acl" "private_data_subnet_acl" {
   }
 
   tags = merge(local.common_tags, {
-    Name = "${var.project}-${var.environment}-private-data-subnet-acl"
+    Name = "${var.project}-${var.environment}-private-db-subnet-acl"
   })
 }

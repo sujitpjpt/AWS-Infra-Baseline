@@ -18,9 +18,9 @@ output "private_app_subnet_ids" {
   value       = [for subnet in aws_subnet.private_app_subnet : subnet.id]
 }
 
-output "private_data_subnet_ids" {
-  description = "The IDs of the private data subnets"
-  value       = [for subnet in aws_subnet.private_data_subnet : subnet.id]
+output "private_db_subnet_ids" {
+  description = "The IDs of the private db subnets"
+  value       = [for subnet in aws_subnet.private_db_subnet : subnet.id]
 }
 
 output "public_subnet_acl" {
@@ -33,9 +33,9 @@ output "private_app_subnet_acl" {
   value       = aws_network_acl.private_app_subnet_acl.id
 }
 
-output "private_data_subnet_acl" {
-  description = "The ID of the private data subnet ACL"
-  value       = aws_network_acl.private_data_subnet_acl.id
+output "private_db_subnet_acl" {
+  description = "The ID of the private db subnet ACL"
+  value       = aws_network_acl.private_db_subnet_acl.id
 }
 
 output "vpc_app_port" {
@@ -44,6 +44,6 @@ output "vpc_app_port" {
 }
 
 output "vpc_db_port" {
-  description = "The port the data tier listens on"
+  description = "The port the db tier listens on"
   value       = var.db_port
 }
