@@ -1,5 +1,24 @@
 # Root module for the dev environment — calls reusable modules and passes environment-specific values; no env-specific logic lives inside a module.
 
+locals {
+  public_instances = {
+    for index, subnet_id in module.vpc.public_subnet_ids : index => {
+      subnet_id                   = subnet_id
+      security_group_id           = module.sg.public_sg_id
+      instance_type               = "t3.micro"
+      associate_public_ip_address = true
+    }
+  }
+  private_app_instances = {
+    for index, subnet_id in module.vpc.private_app_subnet_ids : index => {
+      subnet_id                   = subnet_id
+      security_group_id           = module.sg.private_app_sg_id
+      instance_type               = "t3.micro"
+      associate_public_ip_address = false
+    }
+  }
+}
+
 module "remote_state" {
   # Path to the reusable module — two levels up, then into modules/remote-state
   source      = "../../modules/remote-state"
@@ -27,3 +46,22 @@ module "iam" {
   project     = "aws-infra-baseline"
   environment = "dev"
 }
+
+module "ec2" {
+  source                    = "../../modules/ec2"
+  project                   = "aws-infra-baseline"
+  environment               = "dev"
+  iam_instance_profile_name = module.iam.ssm_instance_profile_name
+  public_instances          = local.public_instances
+  private_app_instances     = local.private_app_instances
+}
+
+module "rds" {
+  source            = "../../modules/rds"
+  project           = "aws-infra-baseline"
+  environment       = "dev"
+  subnet_ids        = module.vpc.private_db_subnet_ids
+  security_group_id = module.sg.private_db_sg_id
+  port              = module.vpc.vpc_db_port
+}
+
