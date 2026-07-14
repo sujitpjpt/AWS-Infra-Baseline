@@ -4,8 +4,7 @@ set -euo pipefail
 # AL2023 ships Python 3 but not pip — needed to install the app's dependencies below.
 dnf install -y python3-pip
 
-# Terraform's templatefile() has already substituted ${app_py} with the full contents of app.py
-# before this script ever reaches the instance, so this just writes the rendered source to disk.
+# Terraform's templatefile() has already substituted $${app_py} with the full contents of app.py before this script ever reaches the instance, so this just writes the rendered source to disk.
 mkdir -p /opt/app
 cat > /opt/app/app.py << 'PYEOF'
 ${app_py}
