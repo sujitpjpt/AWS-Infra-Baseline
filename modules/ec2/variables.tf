@@ -8,8 +8,13 @@ variable "environment" {
   type        = string
 }
 
-variable "iam_instance_profile_name" {
-  description = "The name of the IAM instance profile to associate with the EC2 instances"
+variable "public_iam_instance_profile_name" {
+  description = "The name of the IAM instance profile to associate with public-tier EC2 instances"
+  type        = string
+}
+
+variable "private_iam_instance_profile_name" {
+  description = "The name of the IAM instance profile to associate with private-app-tier EC2 instances"
   type        = string
 }
 

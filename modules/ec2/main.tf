@@ -18,7 +18,7 @@ resource "aws_instance" "public_ec2_instance" {
   subnet_id                   = each.value.subnet_id
   vpc_security_group_ids      = [each.value.security_group_id]
   associate_public_ip_address = each.value.associate_public_ip_address
-  iam_instance_profile        = var.iam_instance_profile_name
+  iam_instance_profile        = var.public_iam_instance_profile_name
 
   root_block_device {
     encrypted = true
@@ -36,7 +36,7 @@ resource "aws_instance" "private_app_ec2_instance" {
   subnet_id                   = each.value.subnet_id
   vpc_security_group_ids      = [each.value.security_group_id]
   associate_public_ip_address = each.value.associate_public_ip_address
-  iam_instance_profile        = var.iam_instance_profile_name
+  iam_instance_profile        = var.private_iam_instance_profile_name
 
   root_block_device {
     encrypted = true

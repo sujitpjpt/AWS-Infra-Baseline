@@ -41,19 +41,14 @@ module "sg" {
   db_port     = module.vpc.vpc_db_port
 }
 
-module "iam" {
-  source      = "../../modules/iam"
-  project     = "aws-infra-baseline"
-  environment = "dev"
-}
-
 module "ec2" {
-  source                    = "../../modules/ec2"
-  project                   = "aws-infra-baseline"
-  environment               = "dev"
-  iam_instance_profile_name = module.iam.ssm_instance_profile_name
-  public_instances          = local.public_instances
-  private_app_instances     = local.private_app_instances
+  source                            = "../../modules/ec2"
+  project                           = "aws-infra-baseline"
+  environment                       = "dev"
+  public_iam_instance_profile_name  = module.iam.public_instance_profile_name
+  private_iam_instance_profile_name = module.iam.private_instance_profile_name
+  public_instances                  = local.public_instances
+  private_app_instances             = local.private_app_instances
 }
 
 module "rds" {
@@ -63,5 +58,12 @@ module "rds" {
   subnet_ids        = module.vpc.private_db_subnet_ids
   security_group_id = module.sg.private_db_sg_id
   port              = module.vpc.vpc_db_port
+}
+
+module "iam" {
+  source         = "../../modules/iam"
+  project        = "aws-infra-baseline"
+  environment    = "dev"
+  rds_secret_arn = module.rds.master_user_secret_arn
 }
 
