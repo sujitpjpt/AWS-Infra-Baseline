@@ -8,24 +8,14 @@ variable "environment" {
   type        = string
 }
 
-variable "public_iam_instance_profile_name" {
-  description = "The name of the IAM instance profile to associate with public-tier EC2 instances"
-  type        = string
-}
-
 variable "private_iam_instance_profile_name" {
   description = "The name of the IAM instance profile to associate with private-app-tier EC2 instances"
   type        = string
 }
 
-variable "public_instances" {
-  description = "A map of public EC2 instance configurations, keyed by index"
-  type = map(object({
-    subnet_id                   = string
-    security_group_id           = string
-    instance_type               = string
-    associate_public_ip_address = bool
-  }))
+variable "app_port" {
+  description = "Port the app tier's Flask process listens on, matches the ALB target group port"
+  type        = number
 }
 
 variable "private_app_instances" {

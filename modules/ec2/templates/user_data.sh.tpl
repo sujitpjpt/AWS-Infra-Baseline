@@ -30,6 +30,7 @@ Environment=DB_HOST=${db_host}
 Environment=DB_PORT=${db_port}
 Environment=DB_NAME=${db_name}
 Environment=DB_SECRET_ARN=${db_secret_arn}
+Environment=APP_PORT=${app_port}
 
 [Install]
 WantedBy=multi-user.target

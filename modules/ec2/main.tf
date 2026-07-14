@@ -18,24 +18,7 @@ locals {
     db_port       = var.rds_port
     db_name       = var.rds_db_name
     db_secret_arn = var.rds_secret_arn
-  })
-}
-
-resource "aws_instance" "public_ec2_instance" {
-  for_each                    = var.public_instances
-  ami                         = data.aws_ssm_parameter.al2023_ami.value
-  instance_type               = each.value.instance_type
-  subnet_id                   = each.value.subnet_id
-  vpc_security_group_ids      = [each.value.security_group_id]
-  associate_public_ip_address = each.value.associate_public_ip_address
-  iam_instance_profile        = var.public_iam_instance_profile_name
-
-  root_block_device {
-    encrypted = true
-  }
-
-  tags = merge(local.common_tags, {
-    Name = "${var.project}-${var.environment}-ec2-public-${each.key}"
+    app_port      = var.app_port
   })
 }
 
