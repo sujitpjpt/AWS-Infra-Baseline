@@ -29,6 +29,7 @@ data "aws_iam_policy_document" "rds_secret_access" {
 }
 
 resource "aws_iam_policy" "rds_secret_access" {
+  name   = "${var.project}-${var.environment}-rds-secret-access"
   policy = data.aws_iam_policy_document.rds_secret_access.json
   tags = merge(local.common_tags, {
     Name = "${var.project}-${var.environment}-rds-secret-access"
