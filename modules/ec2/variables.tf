@@ -37,3 +37,23 @@ variable "private_app_instances" {
     associate_public_ip_address = bool
   }))
 }
+
+variable "rds_endpoint" {
+  description = "Hostname of the RDS instance the private app-tier instances connect to"
+  type        = string
+}
+
+variable "rds_port" {
+  description = "Port the RDS instance listens on"
+  type        = number
+}
+
+variable "rds_db_name" {
+  description = "Name of the database on the RDS instance"
+  type        = string
+}
+
+variable "rds_secret_arn" {
+  description = "ARN of the Secrets Manager secret holding the RDS master credentials"
+  type        = string
+}

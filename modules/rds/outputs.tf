@@ -8,6 +8,13 @@ output "db_instance_endpoint" {
   value       = aws_db_instance.db_instance.endpoint
 }
 
+# Plain hostname, distinct from db_instance_endpoint (which is "host:port") — clients like psycopg2
+# take host and port as separate arguments, so this is the value they actually need.
+output "db_instance_address" {
+  description = "Hostname of the RDS instance, without the port"
+  value       = aws_db_instance.db_instance.address
+}
+
 output "db_instance_id" {
   description = "ID of the RDS instance"
   value       = aws_db_instance.db_instance.id

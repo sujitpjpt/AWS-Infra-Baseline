@@ -7,7 +7,19 @@ provisioning its own. Master password uses `manage_master_user_password = true` 
 secret in Secrets Manager), not a Terraform-generated secret.
 
 <!-- BEGIN_TF_DOCS -->
+## Requirements
 
+No requirements.
+
+## Providers
+
+| Name | Version |
+| ---- | ------- |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+
+## Modules
+
+No modules.
 
 ## Resources
 
@@ -24,7 +36,7 @@ secret in Secrets Manager), not a Terraform-generated secret.
 | <a name="input_db_name"></a> [db\_name](#input\_db\_name) | Name of the initial database created on the instance | `string` | `"smoketest"` | no |
 | <a name="input_deletion_protection"></a> [deletion\_protection](#input\_deletion\_protection) | Whether to enable deletion protection on the instance | `bool` | `false` | no |
 | <a name="input_engine"></a> [engine](#input\_engine) | The database engine to use | `string` | `"postgres"` | no |
-| <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | Postgres engine version | `string` | `"16.4"` | no |
+| <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | Postgres engine version | `string` | `"16.14"` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment name, used in resource naming | `string` | n/a | yes |
 | <a name="input_instance_class"></a> [instance\_class](#input\_instance\_class) | RDS instance class — db.t4g.micro is free-tier eligible (Graviton) | `string` | `"db.t4g.micro"` | no |
 | <a name="input_master_username"></a> [master\_username](#input\_master\_username) | The master username for the database | `string` | `"db_admin"` | no |
@@ -40,5 +52,12 @@ secret in Secrets Manager), not a Terraform-generated secret.
 
 | Name | Description |
 | ---- | ----------- |
+| <a name="output_db_instance_address"></a> [db\_instance\_address](#output\_db\_instance\_address) | Hostname of the RDS instance, without the port |
+| <a name="output_db_instance_arn"></a> [db\_instance\_arn](#output\_db\_instance\_arn) | ARN of the RDS instance |
+| <a name="output_db_instance_endpoint"></a> [db\_instance\_endpoint](#output\_db\_instance\_endpoint) | Endpoint of the RDS instance |
+| <a name="output_db_instance_id"></a> [db\_instance\_id](#output\_db\_instance\_id) | ID of the RDS instance |
+| <a name="output_db_instance_port"></a> [db\_instance\_port](#output\_db\_instance\_port) | Port the RDS instance listens on |
+| <a name="output_db_name"></a> [db\_name](#output\_db\_name) | Name of the initial database created on the instance |
 | <a name="output_master_user_secret_arn"></a> [master\_user\_secret\_arn](#output\_master\_user\_secret\_arn) | ARN of the Secrets Manager secret holding the RDS master password |
+| <a name="output_master_username"></a> [master\_username](#output\_master\_username) | The master username for the database |
 <!-- END_TF_DOCS -->

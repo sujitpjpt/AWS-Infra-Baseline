@@ -49,6 +49,10 @@ module "ec2" {
   private_iam_instance_profile_name = module.iam.private_instance_profile_name
   public_instances                  = local.public_instances
   private_app_instances             = local.private_app_instances
+  rds_endpoint                      = module.rds.db_instance_address
+  rds_port                          = module.rds.db_instance_port
+  rds_db_name                       = module.rds.db_name
+  rds_secret_arn                    = module.rds.master_user_secret_arn
 }
 
 module "rds" {
