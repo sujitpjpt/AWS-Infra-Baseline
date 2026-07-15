@@ -1,14 +1,6 @@
 # Root module for the dev environment — calls reusable modules and passes environment-specific values; no env-specific logic lives inside a module.
 
 locals {
-  public_instances = {
-    for index, subnet_id in module.vpc.public_subnet_ids : index => {
-      subnet_id                   = subnet_id
-      security_group_id           = module.sg.public_sg_id
-      instance_type               = "t3.micro"
-      associate_public_ip_address = true
-    }
-  }
   private_app_instances = {
     for index, subnet_id in module.vpc.private_app_subnet_ids : index => {
       subnet_id                   = subnet_id
@@ -45,9 +37,8 @@ module "ec2" {
   source                            = "../../modules/ec2"
   project                           = "aws-infra-baseline"
   environment                       = "dev"
-  public_iam_instance_profile_name  = module.iam.public_instance_profile_name
   private_iam_instance_profile_name = module.iam.private_instance_profile_name
-  public_instances                  = local.public_instances
+  app_port                          = module.vpc.vpc_app_port
   private_app_instances             = local.private_app_instances
   rds_endpoint                      = module.rds.db_instance_address
   rds_port                          = module.rds.db_instance_port
@@ -71,3 +62,13 @@ module "iam" {
   rds_secret_arn = module.rds.master_user_secret_arn
 }
 
+module "alb" {
+  source              = "../../modules/alb"
+  project             = "aws-infra-baseline"
+  environment         = "dev"
+  public_subnet_ids   = module.vpc.public_subnet_ids
+  public_sg_id        = module.sg.public_sg_id
+  vpc_id              = module.vpc.vpc_id
+  app_port            = module.vpc.vpc_app_port
+  target_instance_ids = module.ec2.private_app_ec2_instance_ids
+}

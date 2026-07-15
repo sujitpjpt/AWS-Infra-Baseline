@@ -17,13 +17,10 @@ No dedicated bastion role — SSM Session Manager is the sole access path, per t
 | Name | Type |
 | ---- | ---- |
 | [aws_iam_instance_profile.private_instance_profile](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile) | resource |
-| [aws_iam_instance_profile.public_instance_profile](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile) | resource |
 | [aws_iam_policy.rds_secret_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_role.private_instance_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role.public_instance_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy_attachment.rds_secret_access_private](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.ssm_attach_private](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.ssm_attach_public](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_policy_document.rds_secret_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.ssm_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 
@@ -41,6 +38,4 @@ No dedicated bastion role — SSM Session Manager is the sole access path, per t
 | ---- | ----------- |
 | <a name="output_private_instance_profile_arn"></a> [private\_instance\_profile\_arn](#output\_private\_instance\_profile\_arn) | The ARN of the private-tier instance profile |
 | <a name="output_private_instance_profile_name"></a> [private\_instance\_profile\_name](#output\_private\_instance\_profile\_name) | The name of the private-tier instance profile |
-| <a name="output_public_instance_profile_arn"></a> [public\_instance\_profile\_arn](#output\_public\_instance\_profile\_arn) | The ARN of the public-tier instance profile |
-| <a name="output_public_instance_profile_name"></a> [public\_instance\_profile\_name](#output\_public\_instance\_profile\_name) | The name of the public-tier instance profile |
 <!-- END_TF_DOCS -->

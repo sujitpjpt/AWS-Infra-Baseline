@@ -56,16 +56,6 @@ output "private_db_sg_id" {
 
 # --- IAM ---
 
-output "public_instance_profile_arn" {
-  description = "The ARN of the public-tier instance profile"
-  value       = module.iam.public_instance_profile_arn
-}
-
-output "public_instance_profile_name" {
-  description = "The name of the public-tier instance profile"
-  value       = module.iam.public_instance_profile_name
-}
-
 output "private_instance_profile_arn" {
   description = "The ARN of the private-tier instance profile"
   value       = module.iam.private_instance_profile_arn
@@ -119,11 +109,6 @@ output "master_user_secret_arn" {
 }
 
 # --- EC2 ---
-
-output "public_instance_ids" {
-  description = "IDs of the public EC2 smoke-test instances"
-  value       = module.ec2.public_instance_ids
-}
 
 output "private_app_instance_ids" {
   description = "IDs of the private app-tier EC2 smoke-test instances"

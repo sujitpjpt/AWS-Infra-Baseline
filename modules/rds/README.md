@@ -7,19 +7,7 @@ provisioning its own. Master password uses `manage_master_user_password = true` 
 secret in Secrets Manager), not a Terraform-generated secret.
 
 <!-- BEGIN_TF_DOCS -->
-## Requirements
 
-No requirements.
-
-## Providers
-
-| Name | Version |
-| ---- | ------- |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
-
-## Modules
-
-No modules.
 
 ## Resources
 
