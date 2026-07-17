@@ -52,7 +52,7 @@ resource "aws_lb_listener" "http" {
 }
 
 resource "aws_lb_target_group_attachment" "app_tg_attach" {
-  for_each         = toset(var.target_instance_ids)
+  for_each         = var.target_instance_ids
   target_group_arn = aws_lb_target_group.app_tg.arn
   target_id        = each.value
   port             = var.app_port

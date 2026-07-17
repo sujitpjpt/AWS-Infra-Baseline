@@ -29,8 +29,8 @@ variable "app_port" {
 }
 
 variable "target_instance_ids" {
-  description = "List of IDs of the target EC2 instances to attach to the ALB target group"
-  type        = list(string)
+  description = "Map of IDs of the target EC2 instances to attach to the ALB target group, keyed the same as the EC2 module's private_app_instances"
+  type        = map(string)
 }
 
 variable "health_check_path" {

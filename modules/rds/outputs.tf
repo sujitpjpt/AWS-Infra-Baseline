@@ -39,3 +39,8 @@ output "master_username" {
   description = "The master username for the database"
   value       = aws_db_instance.db_instance.username
 }
+
+output "db_instance_resource_id" {
+  description = "The RDS resource ID of the instance"
+  value       = aws_db_instance.db_instance.resource_id
+}

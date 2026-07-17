@@ -70,5 +70,5 @@ module "alb" {
   public_sg_id        = module.sg.public_sg_id
   vpc_id              = module.vpc.vpc_id
   app_port            = module.vpc.vpc_app_port
-  target_instance_ids = module.ec2.private_app_ec2_instance_ids
+  target_instance_ids = module.ec2.private_app_instance_ids
 }
