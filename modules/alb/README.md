@@ -26,7 +26,7 @@ an HTTP listener on port 80 forwarding to a target group health-checked against 
 | <a name="input_project"></a> [project](#input\_project) | Project name, used in resource naming | `string` | n/a | yes |
 | <a name="input_public_sg_id"></a> [public\_sg\_id](#input\_public\_sg\_id) | ID of the security group for the ALB | `string` | n/a | yes |
 | <a name="input_public_subnet_ids"></a> [public\_subnet\_ids](#input\_public\_subnet\_ids) | List of public subnet IDs for the ALB | `list(string)` | n/a | yes |
-| <a name="input_target_instance_ids"></a> [target\_instance\_ids](#input\_target\_instance\_ids) | List of IDs of the target EC2 instances to attach to the ALB target group | `list(string)` | n/a | yes |
+| <a name="input_target_instance_ids"></a> [target\_instance\_ids](#input\_target\_instance\_ids) | Map of IDs of the target EC2 instances to attach to the ALB target group, keyed the same as the EC2 module's private\_app\_instances | `map(string)` | n/a | yes |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | ID of the VPC where the ALB will be deployed | `string` | n/a | yes |
 
 ## Outputs
