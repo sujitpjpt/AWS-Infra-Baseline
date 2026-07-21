@@ -8,6 +8,7 @@ locals {
 }
 
 resource "aws_lb" "public_alb" {
+  name               = "${var.project}-${var.environment}-public-alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [var.public_sg_id]
