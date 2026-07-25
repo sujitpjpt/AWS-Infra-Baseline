@@ -20,7 +20,7 @@ terraform {
 }
 
 # Region is set here at the provider level, not inside modules, so modules remain region-agnostic and reusable.
+# No hardcoded profile — credentials come from the standard AWS chain (env vars in CI via OIDC, AWS_PROFILE locally).
 provider "aws" {
-  profile = "terraform-dev"
-  region  = "ca-central-1"
+  region = "ca-central-1"
 }
