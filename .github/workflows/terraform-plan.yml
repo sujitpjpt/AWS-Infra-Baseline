@@ -1,13 +1,20 @@
 name: Terraform Plan
 on:
+  # pull_request:
+  #   branches:
+  #     - main
   push:
     branches:
       - dev
 # Need ID token write permission to use OIDC
 permissions:
   id-token: write
+
+env:
+  TF_WORKING_DIR: envs/dev
+
 jobs:
-  authenticate:
+  plan:
     runs-on: ubuntu-latest
     steps:
       - name: Configure AWS Credentials
@@ -15,10 +22,11 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ca-central-1
-  test:
-    runs-on: ubuntu-latest
-    steps:       
-      - name: Additional steps
-        run: |
-          # Your commands that require AWS credentials
-          aws sts get-caller-identity
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~1.15.6"
+
+      - name: Terraform Init
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init
