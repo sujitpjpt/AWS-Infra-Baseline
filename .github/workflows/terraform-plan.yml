@@ -1,8 +1,5 @@
 name: Terraform Plan
 on:
-  # pull_request:
-  #   branches:
-  #     - main
   push:
     branches:
       - dev
@@ -18,6 +15,9 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ca-central-1
+  test:
+    runs-on: ubuntu-latest
+    steps:       
       - name: Additional steps
         run: |
           # Your commands that require AWS credentials
