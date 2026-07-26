@@ -1,11 +1,8 @@
 name: Terraform Plan
 on:
-  # pull_request:
-  #   branches:
-  #     - main
-  push:
+  pull_request:
     branches:
-      - dev
+      - main
 # Need ID token write permission to use OIDC
 permissions:
   id-token: write
@@ -33,3 +30,15 @@ jobs:
       - name: Terraform Init
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform init
+
+      - name: Terraform Format Check
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform fmt -check
+
+      - name: Terraform Validate
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform plan
