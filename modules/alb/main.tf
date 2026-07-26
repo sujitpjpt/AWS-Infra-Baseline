@@ -9,13 +9,13 @@ locals {
 
 # Internet-facing ALB living in the public subnets — the only path from the internet into the app tier.
 resource "aws_lb" "public_alb" {
-  name               = "${var.project}-${var.environment}-public-alb"
+  name               = "${var.project}-${var.environment}-alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [var.public_sg_id]
   subnets            = var.public_subnet_ids
   tags = merge(local.common_tags, {
-    Name = "${var.project}-${var.environment}-public-alb"
+    Name = "${var.project}-${var.environment}-alb"
   })
 }
 
