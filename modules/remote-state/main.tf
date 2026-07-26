@@ -1,9 +1,4 @@
-# Creates the S3 bucket that will store Terraform state files.
-# This must be applied with LOCAL state first (no backend block yet).
-# After apply, you add the backend block and run terraform init -migrate-state.
-
-# The bucket name follows the convention: {project}-{env}-tfstate
-# e.g. infra-dev-tfstate
+# Creates the S3 bucket for Terraform state — apply this with LOCAL state first, then add the backend block and run terraform init -migrate-state.
 
 resource "aws_s3_bucket" "state" {
   bucket = "${var.project}-${var.environment}-tfstate"
@@ -28,8 +23,7 @@ resource "aws_s3_bucket_versioning" "state" {
   }
 }
 
-# Encrypts state files at rest using AES256.
-# State files can contain sensitive values so encryption is non-negotiable.
+# Encrypts state files at rest using AES256 — state can contain sensitive values, so encryption is non-negotiable.
 resource "aws_s3_bucket_server_side_encryption_configuration" "state" {
   bucket = aws_s3_bucket.state.id
 
@@ -47,4 +41,25 @@ resource "aws_s3_bucket_public_access_block" "state" {
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
+}
+
+# Versioning keeps every historical state file, so without expiration old versions accumulate forever.
+# This bounds storage and cleans up delete markers left behind by terraform state operations.
+resource "aws_s3_bucket_lifecycle_configuration" "state" {
+  bucket = aws_s3_bucket.state.id
+
+  rule {
+    id     = "expire-noncurrent-state-versions"
+    status = "Enabled"
+
+    filter {}
+
+    noncurrent_version_expiration {
+      noncurrent_days = 30
+    }
+
+    expiration {
+      expired_object_delete_marker = true
+    }
+  }
 }

@@ -1,6 +1,4 @@
-# Outputs expose values from this module to the calling environment.
-# bucket_name is needed when writing the backend block after bootstrapping.
-# bucket_arn is needed later when writing IAM policies to grant CI/CD access to state.
+# bucket_name is needed for the backend block after bootstrapping; bucket_arn is needed later for IAM policies granting CI/CD access to state.
 
 output "bucket_name" {
   description = "Name of the S3 bucket used for Terraform state"
