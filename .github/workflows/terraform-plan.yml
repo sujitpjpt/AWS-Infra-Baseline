@@ -8,6 +8,8 @@ on:
 # Need ID token write permission to use OIDC
 permissions:
   id-token: write
+  contents: read
+  pull-requests: write
 
 env:
   TF_WORKING_DIR: envs/dev
