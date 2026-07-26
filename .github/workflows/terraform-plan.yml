@@ -3,6 +3,8 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
+  
 # Need ID token write permission to use OIDC
 permissions:
   id-token: write
