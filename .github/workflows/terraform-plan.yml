@@ -8,6 +8,8 @@ on:
 # Need ID token write permission to use OIDC
 permissions:
   id-token: write
+  contents: read
+  pull-requests: write
 
 env:
   TF_WORKING_DIR: envs/dev
@@ -44,3 +46,10 @@ jobs:
       - name: Terraform Plan
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform plan -no-color -input=false | tee plan_output.txt
+
+      - name: Post Plan to PR
+        if: github.event_name == 'pull_request'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-path: ${{ env.TF_WORKING_DIR }}/plan_output.txt
