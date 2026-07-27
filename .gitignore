@@ -5,8 +5,8 @@ DECISIONS.md
 # Private logs
 logs/
 
-# Local destroy script — not for CI, targets envs/dev directly
-scripts/destroy-all.sh
+# Local scripts — not for CI, machine-specific helpers
+scripts/
 
 # Terraform state and overrides
 *.tfstate

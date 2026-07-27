@@ -1,3 +1,5 @@
+# Queries all AZs in the provider's region that are currently usable (excludes ones AWS has disabled for this account).
+# State filter avoids picking an AZ that would fail at apply time.
 data "aws_availability_zones" "available" {
   state = "available"
 }
@@ -30,6 +32,7 @@ resource "aws_vpc" "main_vpc" {
 
 # for_each (not count) keys subnets by CIDR, so reordering the CIDR list won't force unrelated subnets to be destroyed/recreated.
 resource "aws_subnet" "public_subnet" {
+  # zipmap pairs each CIDR with its corresponding AZ by list position, giving for_each a CIDR-keyed map to iterate over.
   for_each          = zipmap(var.public_subnet_cidrs, local.azs)
   vpc_id            = aws_vpc.main_vpc.id
   cidr_block        = each.key

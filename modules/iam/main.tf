@@ -40,6 +40,7 @@ resource "aws_iam_policy" "rds_secret_access" {
 
 # Single role shared by public and private tier instances — the SSM/secret access policies are the same for both.
 resource "aws_iam_role" "private_instance_role" {
+  name               = "${var.project}-${var.environment}-private-instance-role"
   assume_role_policy = data.aws_iam_policy_document.ssm_role.json
   tags = merge(local.common_tags, {
     Name = "${var.project}-${var.environment}-private-instance-role"
@@ -59,6 +60,7 @@ resource "aws_iam_role_policy_attachment" "rds_secret_access_private" {
 
 # Instance profile is the actual object EC2 attaches — the role above can't be assigned to an instance directly.
 resource "aws_iam_instance_profile" "private_instance_profile" {
+  name = "${var.project}-${var.environment}-private-instance-profile"
   role = aws_iam_role.private_instance_role.name
   tags = merge(local.common_tags, {
     Name = "${var.project}-${var.environment}-private-instance-profile"
