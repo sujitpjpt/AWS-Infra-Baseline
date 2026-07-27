@@ -108,11 +108,43 @@ output "master_user_secret_arn" {
   value       = module.rds.master_user_secret_arn
 }
 
+output "db_instance_resource_id" {
+  description = "The RDS resource ID (DbiResourceId) of the instance, needed by Performance Insights' GetResourceMetrics API"
+  value       = module.rds.db_instance_resource_id
+}
+
 # --- EC2 ---
 
 output "private_app_instance_ids" {
   description = "IDs of the private app-tier EC2 smoke-test instances"
   value       = module.ec2.private_app_instance_ids
+}
+
+# --- ALB ---
+
+output "alb_arn" {
+  description = "ARN of the public ALB"
+  value       = module.alb.alb_arn
+}
+
+output "alb_dns_name" {
+  description = "DNS name of the public ALB, used to reach the app tier"
+  value       = module.alb.alb_dns_name
+}
+
+output "alb_zone_id" {
+  description = "Route53 hosted zone ID of the ALB, needed for an alias record"
+  value       = module.alb.alb_zone_id
+}
+
+output "target_group_arn" {
+  description = "ARN of the app-tier target group"
+  value       = module.alb.target_group_arn
+}
+
+output "listener_arn" {
+  description = "ARN of the HTTP listener"
+  value       = module.alb.listener_arn
 }
 
 # --- Remote state ---
