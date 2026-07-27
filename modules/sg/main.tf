@@ -9,6 +9,7 @@ locals {
 
 # Public tier — fronts the app (e.g. ALB). Only this SG is reachable directly from the internet.
 resource "aws_security_group" "public_sg" {
+  name        = "${var.project}-${var.environment}-public-sg"
   description = "Public subnet security group"
   vpc_id      = var.vpc_id
 
@@ -46,6 +47,7 @@ resource "aws_vpc_security_group_egress_rule" "public_to_app_tier" {
 
 # App tier — only reachable from the public tier, never directly from the internet.
 resource "aws_security_group" "private_app_sg" {
+  name        = "${var.project}-${var.environment}-private-app-sg"
   description = "Private App subnet security group"
   vpc_id      = var.vpc_id
 
@@ -92,6 +94,7 @@ resource "aws_vpc_security_group_egress_rule" "https_out" {
 
 # Data tier — only reachable from the app tier; no egress rules needed since SGs are stateful and reply traffic is automatic.
 resource "aws_security_group" "private_db_sg" {
+  name        = "${var.project}-${var.environment}-private-db-sg"
   description = "Private DB subnet security group"
   vpc_id      = var.vpc_id
 

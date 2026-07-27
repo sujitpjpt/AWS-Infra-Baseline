@@ -9,6 +9,7 @@ locals {
 
 # Tells RDS which subnets it's allowed to place the instance in — always the db-tier private subnets, never public.
 resource "aws_db_subnet_group" "db_subnet_group" {
+  name       = "${var.project}-${var.environment}-rds-subnet-group"
   subnet_ids = var.subnet_ids
   tags = merge(local.common_tags, {
     Name = "${var.project}-${var.environment}-rds-subnet-group"
@@ -16,6 +17,7 @@ resource "aws_db_subnet_group" "db_subnet_group" {
 }
 
 resource "aws_db_instance" "db_instance" {
+  identifier        = "${var.project}-${var.environment}-rds-instance"
   allocated_storage = var.allocated_storage
   engine            = var.engine
   engine_version    = var.engine_version

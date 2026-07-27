@@ -21,6 +21,7 @@ resource "aws_lb" "public_alb" {
 
 # target_type "instance" (not "ip" or "lambda") since targets are the EC2 smoke-test instances themselves.
 resource "aws_lb_target_group" "app_tg" {
+  name        = "${var.project}-${var.environment}-app-tg"
   port        = var.app_port
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
