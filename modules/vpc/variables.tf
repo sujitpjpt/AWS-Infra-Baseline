@@ -27,7 +27,7 @@ variable "private_app_subnet_cidrs" {
 }
 
 variable "private_db_subnet_cidrs" {
-  description = "List of CIDR blocks for private subnets, one per AZ"
+  description = "List of CIDR blocks for private db-tier subnets, one per AZ"
   type        = list(string)
   default     = ["10.0.30.0/24", "10.0.40.0/24"]
 }

@@ -1,5 +1,3 @@
-
-
 locals {
   common_tags = {
     Project     = var.project
@@ -66,6 +64,3 @@ resource "aws_iam_instance_profile" "private_instance_profile" {
     Name = "${var.project}-${var.environment}-private-instance-profile"
   })
 }
-
-
-
