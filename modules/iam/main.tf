@@ -38,7 +38,7 @@ resource "aws_iam_policy" "rds_secret_access" {
   })
 }
 
-# Single role shared by public and private tier instances — the SSM/secret access policies are the same for both.
+# Role for the private-app-tier EC2 instances (SSM registration + scoped Secrets Manager read) — no public-tier instance exists, the ALB is the public tier's only entry point.
 resource "aws_iam_role" "private_instance_role" {
   name               = "${var.project}-${var.environment}-private-instance-role"
   assume_role_policy = data.aws_iam_policy_document.ssm_role.json

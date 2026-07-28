@@ -25,6 +25,10 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http" {
   from_port         = 80
   ip_protocol       = "tcp"
   to_port           = 80
+
+  tags = merge(local.common_tags, {
+    Name = "${var.project}-${var.environment}-public-sg-allow-http"
+  })
 }
 
 # Allow inbound HTTPS from anywhere — the real entry point for client traffic.
@@ -34,6 +38,10 @@ resource "aws_vpc_security_group_ingress_rule" "allow_https" {
   from_port         = 443
   ip_protocol       = "tcp"
   to_port           = 443
+
+  tags = merge(local.common_tags, {
+    Name = "${var.project}-${var.environment}-public-sg-allow-https"
+  })
 }
 
 # Only egress the public tier needs: forward decrypted traffic to the app tier on app_port. Everything else is denied.
@@ -43,6 +51,10 @@ resource "aws_vpc_security_group_egress_rule" "public_to_app_tier" {
   from_port                    = var.app_port
   to_port                      = var.app_port
   ip_protocol                  = "tcp"
+
+  tags = merge(local.common_tags, {
+    Name = "${var.project}-${var.environment}-public-sg-to-app-tier"
+  })
 }
 
 # App tier — only reachable from the public tier, never directly from the internet.
@@ -63,6 +75,10 @@ resource "aws_vpc_security_group_ingress_rule" "public_to_app" {
   from_port                    = var.app_port
   to_port                      = var.app_port
   ip_protocol                  = "tcp"
+
+  tags = merge(local.common_tags, {
+    Name = "${var.project}-${var.environment}-private-app-sg-from-public"
+  })
 }
 
 # Allow the app tier to reach the database tier on db_port — SG-to-SG reference, not a CIDR, so only this tier can reach the DB.
@@ -72,6 +88,10 @@ resource "aws_vpc_security_group_egress_rule" "app_to_db" {
   from_port                    = var.db_port
   to_port                      = var.db_port
   ip_protocol                  = "tcp"
+
+  tags = merge(local.common_tags, {
+    Name = "${var.project}-${var.environment}-private-app-sg-to-db"
+  })
 }
 
 # Allow outbound HTTP — needed for the app tier's own internet-bound calls (e.g. package installs) via the NAT gateway.
@@ -81,6 +101,10 @@ resource "aws_vpc_security_group_egress_rule" "http_out" {
   from_port         = 80
   to_port           = 80
   ip_protocol       = "tcp"
+
+  tags = merge(local.common_tags, {
+    Name = "${var.project}-${var.environment}-private-app-sg-http-out"
+  })
 }
 
 # Allow outbound HTTPS — needed for the app tier's own internet-bound calls (e.g. external APIs, package registries) via the NAT gateway.
@@ -90,6 +114,10 @@ resource "aws_vpc_security_group_egress_rule" "https_out" {
   from_port         = 443
   to_port           = 443
   ip_protocol       = "tcp"
+
+  tags = merge(local.common_tags, {
+    Name = "${var.project}-${var.environment}-private-app-sg-https-out"
+  })
 }
 
 # Data tier — only reachable from the app tier; no egress rules needed since SGs are stateful and reply traffic is automatic.
@@ -110,4 +138,8 @@ resource "aws_vpc_security_group_ingress_rule" "database_access" {
   from_port                    = var.db_port
   to_port                      = var.db_port
   ip_protocol                  = "tcp"
+
+  tags = merge(local.common_tags, {
+    Name = "${var.project}-${var.environment}-private-db-sg-from-app"
+  })
 }
