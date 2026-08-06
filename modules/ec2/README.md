@@ -43,5 +43,5 @@ a Terraform variable, so this module stays region-agnostic.
 
 | Name | Description |
 | ---- | ----------- |
-| <a name="output_private_app_instance_ids"></a> [private\_app\_instance\_ids](#output\_private\_app\_instance\_ids) | IDs of the private application EC2 instances |
+| <a name="output_private_app_instance_ids"></a> [private\_app\_instance\_ids](#output\_private\_app\_instance\_ids) | IDs of the private application EC2 instances, keyed the same as var.private\_app\_instances |
 <!-- END_TF_DOCS -->

@@ -2,7 +2,7 @@
 
 Provisions the VPC, public/private subnets across multiple AZs, internet gateway, NAT gateway,
 and route tables that form the network foundation for this repo. Downstream modules (sg, ec2, rds, iam)
-and downstream repos (aws-rds-observability, aws-eks-platform) consume its outputs.
+consume its outputs.
 
 <!-- BEGIN_TF_DOCS -->
 
@@ -37,7 +37,7 @@ and downstream repos (aws-rds-observability, aws-eks-platform) consume its outpu
 | <a name="input_db_port"></a> [db\_port](#input\_db\_port) | Port the db tier listens on (5432 for Postgres, 3306 for MySQL) | `number` | `5432` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment name, used in resource naming | `string` | n/a | yes |
 | <a name="input_private_app_subnet_cidrs"></a> [private\_app\_subnet\_cidrs](#input\_private\_app\_subnet\_cidrs) | List of CIDR blocks for private subnets, one per AZ | `list(string)` | <pre>[<br/>  "10.0.10.0/24",<br/>  "10.0.20.0/24"<br/>]</pre> | no |
-| <a name="input_private_db_subnet_cidrs"></a> [private\_db\_subnet\_cidrs](#input\_private\_db\_subnet\_cidrs) | List of CIDR blocks for private subnets, one per AZ | `list(string)` | <pre>[<br/>  "10.0.30.0/24",<br/>  "10.0.40.0/24"<br/>]</pre> | no |
+| <a name="input_private_db_subnet_cidrs"></a> [private\_db\_subnet\_cidrs](#input\_private\_db\_subnet\_cidrs) | List of CIDR blocks for private db-tier subnets, one per AZ | `list(string)` | <pre>[<br/>  "10.0.30.0/24",<br/>  "10.0.40.0/24"<br/>]</pre> | no |
 | <a name="input_project"></a> [project](#input\_project) | Project name, used in resource naming | `string` | n/a | yes |
 | <a name="input_public_subnet_cidrs"></a> [public\_subnet\_cidrs](#input\_public\_subnet\_cidrs) | List of CIDR blocks for public subnets, one per AZ | `list(string)` | <pre>[<br/>  "10.0.1.0/24",<br/>  "10.0.2.0/24"<br/>]</pre> | no |
 | <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | CIDR block for VPC | `string` | `"10.0.0.0/16"` | no |

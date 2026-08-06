@@ -1,10 +1,9 @@
 # rds
 
 Provisions a single-AZ, free-tier eligible Postgres instance (`db.t4g.micro`) used to smoke-test
-db-tier connectivity from the app-tier EC2 instance. Not a production database design — Phase 2
-(`aws-rds-observability`) adds Multi-AZ and observability on top of this instance rather than
-provisioning its own. Master password uses `manage_master_user_password = true` (RDS-managed
-secret in Secrets Manager), not a Terraform-generated secret.
+db-tier connectivity from the app-tier EC2 instance. Not a production database design. Master
+password uses `manage_master_user_password = true` (RDS-managed secret in Secrets Manager), not
+a Terraform-generated secret.
 
 <!-- BEGIN_TF_DOCS -->
 
@@ -45,6 +44,7 @@ secret in Secrets Manager), not a Terraform-generated secret.
 | <a name="output_db_instance_endpoint"></a> [db\_instance\_endpoint](#output\_db\_instance\_endpoint) | Endpoint of the RDS instance |
 | <a name="output_db_instance_id"></a> [db\_instance\_id](#output\_db\_instance\_id) | ID of the RDS instance |
 | <a name="output_db_instance_port"></a> [db\_instance\_port](#output\_db\_instance\_port) | Port the RDS instance listens on |
+| <a name="output_db_instance_resource_id"></a> [db\_instance\_resource\_id](#output\_db\_instance\_resource\_id) | The RDS resource ID of the instance |
 | <a name="output_db_name"></a> [db\_name](#output\_db\_name) | Name of the initial database created on the instance |
 | <a name="output_master_user_secret_arn"></a> [master\_user\_secret\_arn](#output\_master\_user\_secret\_arn) | ARN of the Secrets Manager secret holding the RDS master password |
 | <a name="output_master_username"></a> [master\_username](#output\_master\_username) | The master username for the database |
